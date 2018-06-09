@@ -1,0 +1,10 @@
+{
+  "name": "rememberme-database",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "knex": "^0.14.6",
+    "pg": "^7.4.3",
+    "q": "^1.4.1"
+  }
+}
