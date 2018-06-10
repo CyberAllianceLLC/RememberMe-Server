@@ -29,9 +29,8 @@ q.fcall(function () {
   return knex.schema.createTable('tokens', function (table) {
     table.string('token_id', 15).notNullable().primary().unique();
     table.string('user_id', 20).notNullable().references('users.user_id').onDelete('CASCADE').index();
-    table.string('holder', 20).notNullable().references('users.user_id').onDelete('CASCADE').index();
     table.enu('type', ['refresh', 'api']).notNullable();
-    table.string('name', 100).notNullable();
+    table.string('session', 100).notNullable();
     table.specificType('scope', 'varchar(50)[]').notNullable().defaultTo('{}');
     table.timestamp('expires').notNullable();
     table.timestamp('created_at').notNullable().defaultTo(knex.raw('now()')).index();

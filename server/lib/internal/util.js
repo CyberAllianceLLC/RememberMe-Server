@@ -8,19 +8,17 @@ var knex = lib.config.DB;
 
 var util = {};
 
-//DONE: newRefreshToken <user_id> <holder> <name> <scope>
+//DONE: newRefreshToken <user_id> <session> <scope>
 util.newRefreshToken = function (query) {
   return q.fcall(function () {
     joi.assert(query, {
       user_id: joi.string().min(3).max(20).required(),
-      holder: joi.string().token().min(3).max(20).required(),
-      name: joi.string().max(100).required(),
-      scope: joi.array().items(joi.string().valid(lib.config.TOKENS.user_scope).required()).unique().required()
+      session: joi.string().max(100).required(),
+      scope: joi.array().items(joi.string().valid(lib.config.TOKENS.scope).required()).unique().required()
     });
     return {
       user_id: query.user_id,
-      holder: query.holder,
-      name: query.name,
+      session: query.session,
       scope: query.scope
     };
   }).then(function (data) {
@@ -28,17 +26,15 @@ util.newRefreshToken = function (query) {
     .insert({
       token_id: shortid.generate(),
       user_id: data.user_id,
-      holder: data.holder,
       type: 'refresh',
-      name: data.name,
+      session: data.session,
       scope: data.scope,
       expires: knex.raw('now() + (make_interval(secs => 1) * ?) ', [lib.config.TOKENS.refreshTokenExpire])
     })
     .returning([
       'token_id',
       'user_id',
-      'holder',
-      'name',
+      'session',
       'scope'
     ]);
   }).then(function (token) {
@@ -46,8 +42,7 @@ util.newRefreshToken = function (query) {
     var refreshToken = jwt.sign({
       token_id: token[0].token_id,
       user_id: token[0].user_id,
-      holder: token[0].holder,
-      name: token[0].name,
+      session: token[0].session,
       scope: token[0].scope
     }, lib.config.JWT, {
       expiresIn: lib.config.TOKENS.refreshTokenExpire
@@ -56,9 +51,8 @@ util.newRefreshToken = function (query) {
     var authToken = jwt.sign({
       token_id: token[0].token_id,
       user_id: token[0].user_id,
-      holder: token[0].holder,
       type: 'auth',
-      name: token[0].name,
+      session: token[0].session,
       scope: token[0].scope
     }, lib.config.JWT, {
       expiresIn: lib.config.TOKENS.refreshTokenExpire
@@ -70,7 +64,7 @@ util.newRefreshToken = function (query) {
   });
 };
 
-//CHECK: removeSessions <user_id>
+//DONE: removeSessions <user_id>
 util.removeSessions = function (query) {
   return q.fcall(function () {
     joi.assert(query, {
@@ -83,7 +77,6 @@ util.removeSessions = function (query) {
     return knex('tokens')
     .del()
     .where('user_id', '=', data.user_id)
-    .where('holder', '=', data.user_id)
     .where('type', '=', 'refresh');
   }).then(function () {
     return 'sessions removed';

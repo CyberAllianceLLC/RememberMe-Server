@@ -6,19 +6,14 @@ exports.config = {
   TOKENS: {
     authTokenExpire: 60 * 20, //20 minutes
     refreshTokenExpire: 60 * 60 * 24 * 365, //1 year
-    apiTokenExpire: 60 * 60 * 24 * 365 * 1000, //1000 years
-    user_scope: [
-      'newVendorRefreshToken',
-      'newApiToken',
-      'getUserTokenInfo',
-      'removeTokens',
-      'getUserSettings',
+    scope: [
+      'newPassword',
       'newEmail',
+      'newUsername',
+      'getUserTokenInfo',
+      'getUserInfo',
       'removeUser',
-      'newPassword'
-    ],
-    api_scope: [
-      'getUserSettings'
+      'removeTokens'
     ]
   },
   DB: require('knex')({
@@ -32,6 +27,7 @@ exports.config = {
 //internal
 exports.middleware = require('./internal/middleware.js');
 exports.util = require('./internal/util.js');
+exports.cronjobs = require('./internal/cronjobs.js');
 
 //api
 exports.oauth = require('./api/auth.js');

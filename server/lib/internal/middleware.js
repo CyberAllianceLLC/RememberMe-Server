@@ -7,7 +7,7 @@ var lib = require('../index.js');
 
 var middleware = {};
 
-//CHECK: auth
+//DONE: auth
 middleware.auth = function (req, res, next) {
   return q.fcall(function () {
     // decode auth token
