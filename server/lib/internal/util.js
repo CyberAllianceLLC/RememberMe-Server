@@ -55,7 +55,7 @@ util.newRefreshToken = function (query) {
       session: token[0].session,
       scope: token[0].scope
     }, lib.config.JWT, {
-      expiresIn: lib.config.TOKENS.refreshTokenExpire
+      expiresIn: lib.config.TOKENS.authTokenExpire
     });
     return {
       refreshToken: refreshToken,

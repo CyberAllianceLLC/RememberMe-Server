@@ -19,7 +19,7 @@ exports.config = {
   DB: require('knex')({
     client: 'pg',
     connection: config.DB,
-    debug: true
+    debug: false
   }),
   SMTP: config.SMTP
 };

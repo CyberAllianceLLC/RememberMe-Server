@@ -171,6 +171,15 @@ router.post('/removeUser', mid.auth, function (req, res, next) {
 });
 
 /*===== Content =====*/
+//TODO: *newContent (user_id) <content_type> <picture> <title> <description>
+//TODO: *getContent (user_id) <[content_id]>
+//TODO: *getContentByType (user_id) <content_type>
+//TODO: *updateContent (user_id) <content_id> <content_type> <picture> <title> <description>
+//TODO: *removeContent (user_id) <content_id>
 
+/*===== Auth =====*/
+//TODO: newAuthToken <refreshToken>
+//TODO: *getUserTokenInfo (user_id)
+//TODO: *removeTokens (user_id) <[token_id]>
 
 module.exports = router;
