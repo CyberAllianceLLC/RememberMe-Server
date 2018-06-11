@@ -89,8 +89,8 @@ router.post('/loginUser', function (req, res, next) {
   });
 });
 
-//DONE: GET *getUserInfo (user_id)
-router.get('/getUserInfo', mid.auth, function (req, res, next) {
+//DONE: POST *getUserInfo (user_id)
+router.post('/getUserInfo', mid.auth, function (req, res, next) {
   lib.users.getUserInfo(req.auth).then(function (data) {
     res.json({
       success: true,
@@ -154,7 +154,21 @@ router.post('/verifyNewEmail', function (req, res, next) {
   });
 });
 
-//TODO: POST *removeUser (user_id) <password>
+//DONE: POST *removeUser (user_id) <password>
+router.post('/removeUser', mid.auth, function (req, res, next) {
+  lib.users.removeUser(req.auth, req.body).then(function (data) {
+    res.json({
+      success: true,
+      result: data
+    });
+  }).catch(function (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      result: 'request failed'
+    });
+  });
+});
 
 /*===== Content =====*/
 

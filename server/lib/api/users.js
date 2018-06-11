@@ -79,7 +79,7 @@ users.newUser = function (query) {
       });
     });
   }).then(function () {
-    return 'email sent';*/
+    return 'Email sent';*/
   });
 };
 
@@ -180,7 +180,7 @@ users.newEmail = function (auth, query) {
         });
       });
     }).then(function (data) {
-      return 'email sent';*/
+      return 'Email sent';*/
     });
   });
 };
@@ -337,7 +337,7 @@ users.sendRecoveryEmail = function (query) {
       });
     });
   }).then(function (data) {
-    return 'email sent';*/
+    return 'Email sent';*/
   });
 };
 
@@ -413,10 +413,42 @@ users.verifyNewEmail = function (query) {
     ]);
   }).then(function (data) {
     joi.assert(data, joi.array().min(1).required());
-    return 'email updated';
+    return 'Email updated';
   });
 };
 
-//TODO: *removeUser (user_id) <password>
+//DONE: *removeUser (user_id) <password>
+users.removeUser = function (auth, query) {
+  return q.fcall(function () {
+    joi.assert(query, {
+      password: joi.string().min(6).required()
+    });
+    return {
+      user_id: auth.user_id,
+      password: query.password
+    };
+  }).then(function (data) {
+    return knex('users')
+    .select([
+      'user_id',
+      'salt'
+    ])
+    .where('user_id', '=', data.user_id)
+    .then(function (user) {
+      joi.assert(user, joi.array().min(1).required());
+      var passwordHash = crypto.pbkdf2Sync(data.password, user[0].salt, 50000, 256, 'sha256').toString('base64');
+      return knex('users')
+      .del()
+      .where('user_id', '=', user[0].user_id)
+      .where('password', '=', passwordHash)
+      .returning([
+        'user_id'
+      ]);
+    }).then(function (data) {
+      joi.assert(data, joi.array().min(1).required());
+      return 'User deleted';
+    });
+  });
+};
 
 module.exports = users;
