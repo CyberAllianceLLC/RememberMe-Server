@@ -7,7 +7,7 @@ var mid = lib.middleware;
 // * = Authentication required
 
 /*===== Users =====*/
-//DONE: POST newUser <username> <email> <password>
+//CHECK: POST newUser <username> <email> <password>
 router.post('/newUser', function (req, res, next) {
   lib.users.newUser(req.body).then(function (data) {
     res.json({
@@ -40,7 +40,7 @@ router.post('/newPassword', mid.auth, function (req, res, next) {
   })
 });
 
-//DONE: POST *newEmail (user_id) <email>
+//CHECK: POST *newEmail (user_id) <email>
 router.post('/newEmail', mid.auth, function (req, res, next) {
   lib.users.newEmail(req.auth, req.body).then(function (data) {
     res.json({
@@ -105,7 +105,7 @@ router.post('/getUserInfo', mid.auth, function (req, res, next) {
   });
 });
 
-//DONE: POST sendRecoveryEmail <email>
+//CHECK: POST sendRecoveryEmail <email>
 router.post('/sendRecoveryEmail', function (req, res, next) {
   lib.users.sendRecoveryEmail(req.body).then(function (data) {
     res.json({
@@ -171,15 +171,133 @@ router.post('/removeUser', mid.auth, function (req, res, next) {
 });
 
 /*===== Content =====*/
-//TODO: *newContent (user_id) <content_type> <picture> <title> <description>
-//TODO: *getContent (user_id) <[content_id]>
-//TODO: *getContentByType (user_id) <content_type>
-//TODO: *updateContent (user_id) <content_id> <content_type> <picture> <title> <description>
-//TODO: *removeContent (user_id) <content_id>
+//DONE: POST *newContent (user_id) <content_type> <picture> <title> <description>
+router.post('/newContent', mid.auth, function (req, res, next) {
+  lib.content.newContent(req.auth, req.body).then(function (data) {
+    res.json({
+      success: true,
+      result: data
+    });
+  }).catch(function (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      result: 'request failed'
+    });
+  });
+});
+
+//DONE: POST *getContent (user_id) <[content_id]>
+router.post('/getContent', mid.auth, function (req, res, next) {
+  lib.content.getContent(req.auth, req.body).then(function (data) {
+    res.json({
+      success: true,
+      result: data
+    });
+  }).catch(function (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      result: 'request failed'
+    });
+  });
+});
+
+//DONE: POST *getContentByType (user_id) <content_type>
+router.post('/getContentByType', mid.auth, function (req, res, next) {
+  lib.content.getContentByType(req.auth, req.body).then(function (data) {
+    res.json({
+      success: true,
+      result: data
+    });
+  }).catch(function (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      result: 'request failed'
+    });
+  });
+});
+
+//DONE: POST *updateContent (user_id) <content_id> <content_type> <picture> <title> <description>
+router.post('/updateContent', mid.auth, function (req, res, next) {
+  lib.content.updateContent(req.auth, req.body).then(function (data) {
+    res.json({
+      success: true,
+      result: data
+    });
+  }).catch(function (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      result: 'request failed'
+    });
+  });
+});
+
+//DONE: POST *removeContent (user_id) <[content_id]>
+router.post('/removeContent', mid.auth, function (req, res, next) {
+  lib.content.removeContent(req.auth, req.body).then(function (data) {
+    res.json({
+      success: true,
+      result: data
+    });
+  }).catch(function (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      result: 'request failed'
+    });
+  });
+});
 
 /*===== Auth =====*/
-//TODO: newAuthToken <refreshToken>
-//TODO: *getUserTokenInfo (user_id)
-//TODO: *removeTokens (user_id) <[token_id]>
+//DONE: newAuthToken <refreshToken>
+router.post('/newAuthToken', function (req, res, next) {
+  lib.auth.newAuthToken(req.body).then(function (data) {
+    res.json({
+      success: true,
+      response: data
+    });
+  }).catch(function (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      response: 'request failed'
+    });
+  });
+});
+
+//DONE: *getUserTokenInfo (user_id)
+router.post('/getUserTokenInfo', mid.auth, function (req, res, next) {
+  lib.auth.getUserTokenInfo(req.auth).then(function (data) {
+    res.json({
+      success: true,
+      response: data
+    });
+  }).catch(function (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      response: 'request failed'
+    });
+  });
+});
+
+//DONE: *removeToken (user_id) <[token_id]>
+router.post('/removeToken', mid.auth, function (req, res, next) {
+  lib.auth.removeToken(req.auth, req.body).then(function (data) {
+    res.json({
+      success: true,
+      response: data
+    });
+  }).catch(function (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      response: 'request failed'
+    });
+  });
+});
 
 module.exports = router;

@@ -10,10 +10,15 @@ exports.config = {
       'newPassword',
       'newEmail',
       'newUsername',
+      'newContent',
       'getUserTokenInfo',
       'getUserInfo',
+      'getContent',
+      'getContentByType',
+      'updateContent',
       'removeUser',
-      'removeTokens'
+      'removeContent',
+      'removeToken'
     ]
   },
   DB: require('knex')({
@@ -30,5 +35,6 @@ exports.util = require('./internal/util.js');
 exports.cronjobs = require('./internal/cronjobs.js');
 
 //api
-exports.oauth = require('./api/auth.js');
+exports.auth = require('./api/auth.js');
 exports.users = require('./api/users.js');
+exports.content = require('./api/content.js');
