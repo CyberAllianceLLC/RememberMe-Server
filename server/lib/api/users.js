@@ -19,7 +19,7 @@ var knex = lib.config.DB;
 
 var users = {};
 
-//DONE: newUser <username> <email> <password>
+//CHECK: newUser <username> <email> <password>
 users.newUser = function (query) {
   return q.fcall(function () {
     joi.assert(query, {
@@ -131,7 +131,7 @@ users.newPassword = function (session_id, auth, query) {
   });
 };
 
-//DONE: *newEmail (user_id) <email>
+//CHECK: *newEmail (user_id) <email>
 users.newEmail = function (auth, query) {
   return q.fcall(function () {
     joi.assert(query, {
@@ -287,7 +287,7 @@ users.getUserInfo = function (query) {
   });
 };
 
-//DONE: sendRecoveryEmail <email>
+//CHECK: sendRecoveryEmail <email>
 users.sendRecoveryEmail = function (query) {
   return q.fcall(function () {
     joi.assert(query, {

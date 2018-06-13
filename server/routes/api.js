@@ -32,7 +32,6 @@ router.post('/newPassword', mid.auth, function (req, res, next) {
       response: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       response: 'request failed'
@@ -64,7 +63,6 @@ router.post('/newUsername', mid.auth, function (req, res, next) {
       response: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       response: 'request failed'
@@ -81,7 +79,6 @@ router.post('/loginUser', function (req, res, next) {
       response: result
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       response: 'request failed'
@@ -97,7 +94,6 @@ router.post('/getUserInfo', mid.auth, function (req, res, next) {
       response: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       response: 'request failed'
@@ -130,7 +126,6 @@ router.post('/enterRecoveryKey', function (req, res, next) {
       response: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       response: 'request failed'
@@ -146,7 +141,6 @@ router.post('/verifyNewEmail', function (req, res, next) {
       response: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       response: 'request failed'
@@ -162,7 +156,6 @@ router.post('/removeUser', mid.auth, function (req, res, next) {
       result: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       result: 'request failed'
@@ -179,7 +172,6 @@ router.post('/newContent', mid.auth, function (req, res, next) {
       result: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       result: 'request failed'
@@ -195,7 +187,6 @@ router.post('/getContent', mid.auth, function (req, res, next) {
       result: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       result: 'request failed'
@@ -211,7 +202,6 @@ router.post('/getContentByType', mid.auth, function (req, res, next) {
       result: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       result: 'request failed'
@@ -227,7 +217,6 @@ router.post('/updateContent', mid.auth, function (req, res, next) {
       result: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       result: 'request failed'
@@ -243,7 +232,6 @@ router.post('/removeContent', mid.auth, function (req, res, next) {
       result: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       result: 'request failed'
@@ -260,7 +248,6 @@ router.post('/newAuthToken', function (req, res, next) {
       response: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       response: 'request failed'
@@ -276,7 +263,6 @@ router.post('/getUserTokenInfo', mid.auth, function (req, res, next) {
       response: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       response: 'request failed'
@@ -292,7 +278,6 @@ router.post('/removeToken', mid.auth, function (req, res, next) {
       response: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       response: 'request failed'
