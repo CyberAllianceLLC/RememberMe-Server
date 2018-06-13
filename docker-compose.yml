@@ -2,6 +2,7 @@ version: '3'
 services:
   db:
     image: postgres:alpine
+    container_name: RememberMe-db
     environment:
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: ''
@@ -10,6 +11,7 @@ services:
 
   build_db:
     build: ./database
+    container_name: RememberMe-build-db
     environment:
       NODE_ENV: 'development'
     volumes:
@@ -20,6 +22,7 @@ services:
 
   server:
     build: ./server
+    container_name: RememberMe-server
     environment:
       DATABASE_URL: 'postgres://postgres:@db:5432/postgres'
       NODE_ENV: 'development'
