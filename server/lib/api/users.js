@@ -7,15 +7,15 @@ var nodemailer = require('nodemailer');
 var lib = require('../index.js');
 var knex = lib.config.DB;
 
-//var nm = nodemailer.createTransport(lib.config.SMTP);
+var nm = nodemailer.createTransport(lib.config.SMTP);
 
-/*nm.verify(function(error, success) {
+nm.verify(function (error) {
   if (error) {
     console.log(error);
   } else {
     console.log('Server is ready to take our messages');
   }
-});*/
+});
 
 var users = {};
 
@@ -52,23 +52,15 @@ users.newUser = function (query) {
     ]);
   }).then(function (data) {
     joi.assert(data, joi.array().min(1).required());
-    var user_id = data[0].user_id;
-    var email = data[0].email;
-    var recovery_key = data[0].recovery_key;
-    return {
-      user_id: user_id,
-      email: email,
-      recovery_key: recovery_key
-    };
     // Send email to user
-    /*return q.Promise(function (resolve, reject) {
+    return q.Promise(function (resolve, reject) {
       var mailOptions = {
-        to: email,
-        from: 'Philip Smith <smithp1992@gmail.com>',
+        to: data[0].email,
+        from: 'RememberMe <noreply@remembermeapp.io>',
         subject: 'Verify Email - RememberMe',
         text: 'An email verification has been requested for your RememberMe account. \n \n To verify your email for ' +
-        'RememberMe, please visit this link: \n http://localhost:3000/verifyEmail/'+ encodeURIComponent(user_id) +
-        '/'+ encodeURIComponent(recovery_key) +'/'+ encodeURIComponent(email) + '\n \n Thank you for using {website name}!'
+        'RememberMe, please visit this link: \n http://localhost:3000/verifyEmail/' + encodeURIComponent(data[0].user_id) +
+        '/' + encodeURIComponent(data[0].recovery_key) + '/' + encodeURIComponent(data[0].email) + '\n \n Thank you for using RememberMe!'
       };
       nm.sendMail(mailOptions, function(error, info) {
         if(error){
@@ -79,7 +71,7 @@ users.newUser = function (query) {
       });
     });
   }).then(function () {
-    return 'Email sent';*/
+    return 'Email sent';
   });
 };
 
@@ -153,23 +145,15 @@ users.newEmail = function (auth, query) {
       'recovery_key'
     ]).then(function (user) {
       joi.assert(user, joi.array().min(1).required());
-      var user_id = user[0].user_id;
-      var recovery_key = user[0].recovery_key;
-      var email = data.new_email;
-      return {
-        user_id: user_id,
-        email: email,
-        recovery_key: recovery_key
-      };
       // Send email to user
-      /*return q.Promise(function (resolve, reject) {
+      return q.Promise(function (resolve, reject) {
         var mailOptions = {
-          to: email,
-          from: 'Philip Smith <smithp1992@gmail.com>',
+          to: data[0].email,
+          from: 'RememberMe <noreply@remembermeapp.io>',
           subject: 'Verify Email - RememberMe',
           text: 'An email verification has been requested for your RememberMe account. \n \n To verify your email for ' +
-          'RememberMe, please visit this link: \n http://localhost:3000/verifyEmail/'+ encodeURIComponent(user_id) +
-          '/'+ encodeURIComponent(recovery_key) +'/'+ encodeURIComponent(email) + '\n \n Thank you for using {website name}!'
+          'RememberMe, please visit this link: \n http://localhost:3000/verifyEmail/' + encodeURIComponent(data[0].user_id) +
+          '/' + encodeURIComponent(data[0].recovery_key) + '/' + encodeURIComponent(data[0].email) + '\n \n Thank you for using RememberMe!'
         };
         nm.sendMail(mailOptions, function(error, info) {
           if(error){
@@ -180,7 +164,7 @@ users.newEmail = function (auth, query) {
         });
       });
     }).then(function (data) {
-      return 'Email sent';*/
+      return 'Email sent';
     });
   });
 };
@@ -311,22 +295,14 @@ users.sendRecoveryEmail = function (query) {
     ]);
   }).then(function (data) {
     joi.assert(data, joi.array().min(1).required());
-    var user_id = data[0].user_id;
-    var email = data[0].email;
-    var recovery_key = data[0].recovery_key;
-    return {
-      user_id: user_id,
-      email: email,
-      recovery_key: recovery_key
-    };
-    /*return q.Promise(function (resolve, reject) {
+    return q.Promise(function (resolve, reject) {
       var mailOptions = {
-        to: email,
-        from: 'Philip Smith <smithp1992@gmail.com>',
-        subject: 'Verify Email - {website name}',
+        to: data[0].email,
+        from: 'RememberMe <noreply@remembermeapp.io>',
+        subject: 'Verify Email - RememberMe',
         text: 'An email verification has been requested for your RememberMe account. \n \n To verify your email for ' +
-        'RememberMe, please visit this link: \n http://localhost:3000/verifyEmail/'+ encodeURIComponent(user_id) +
-        '/'+ encodeURIComponent(recovery_key) +'/'+ encodeURIComponent(email) + '\n \n Thank you for using {website name}!'
+        'RememberMe, please visit this link: \n http://localhost:3000/verifyEmail/' + encodeURIComponent(data[0].user_id) +
+        '/' + encodeURIComponent(data[0].recovery_key) + '/' + encodeURIComponent(data[0].email) + '\n \n Thank you for using RememberMe!'
       };
       nm.sendMail(mailOptions, function(error, info) {
         if(error){
@@ -337,7 +313,7 @@ users.sendRecoveryEmail = function (query) {
       });
     });
   }).then(function (data) {
-    return 'Email sent';*/
+    return 'Email sent';
   });
 };
 
