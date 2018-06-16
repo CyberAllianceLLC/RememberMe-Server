@@ -7,7 +7,7 @@ var mid = lib.middleware;
 // * = Authentication required
 
 /*===== Users =====*/
-//CHECK: POST newUser <username> <email> <password>
+//DONE: POST newUser <username> <email> <password>
 router.post('/newUser', function (req, res, next) {
   lib.users.newUser(req.body).then(function (data) {
     res.json({
@@ -101,9 +101,26 @@ router.post('/getUserInfo', mid.auth, function (req, res, next) {
   });
 });
 
-//CHECK: POST sendRecoveryEmail <email>
+//DONE: POST sendRecoveryEmail <email>
 router.post('/sendRecoveryEmail', function (req, res, next) {
   lib.users.sendRecoveryEmail(req.body).then(function (data) {
+    res.json({
+      success: true,
+      response: data
+    });
+  }).catch(function (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      response: 'request failed'
+    });
+  });
+});
+
+//DONE: verifyRecoveryEmail (session_id) <user_id> <new_password> <recovery_key>
+router.post('/verifyRecoveryEmail', function (req, res, next) {
+  var ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress || '').split(',')[0].trim();
+  lib.users.verifyRecoveryEmail(ip, req.body).then(function (data) {
     res.json({
       success: true,
       response: data
@@ -141,6 +158,7 @@ router.post('/verifyNewEmail', function (req, res, next) {
       response: data
     });
   }).catch(function (error) {
+    console.log(error);
     res.json({
       success: false,
       response: 'request failed'

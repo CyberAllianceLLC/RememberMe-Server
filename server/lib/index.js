@@ -26,7 +26,8 @@ exports.config = {
     connection: config.DB,
     debug: false
   }),
-  SMTP: config.SMTP
+  SMTP: config.SMTP,
+  BASE_URL: config.BASE_URL
 };
 
 //internal

@@ -35,3 +35,18 @@ services:
     ports:
       - 3000:3000
     command: npm run dev
+
+  client:
+    build: ./client
+    container_name: RememberMe-server-client
+    environment:
+      PROXY: 'http://localhost:3000'
+      NODE_ENV: 'development'
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    depends_on:
+      - server
+    ports:
+      - 8080:8080
+    command: npm run serve

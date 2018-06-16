@@ -19,7 +19,7 @@ nm.verify(function (error) {
 
 var users = {};
 
-//CHECK: newUser <username> <email> <password>
+//DONE: newUser <username> <email> <password>
 users.newUser = function (query) {
   return q.fcall(function () {
     joi.assert(query, {
@@ -59,7 +59,7 @@ users.newUser = function (query) {
         from: 'RememberMe <noreply@remembermeapp.io>',
         subject: 'Verify Email - RememberMe',
         text: 'An email verification has been requested for your RememberMe account. \n \n To verify your email for ' +
-        'RememberMe, please visit this link: \n http://localhost:3000/verifyEmail/' + encodeURIComponent(data[0].user_id) +
+        'RememberMe, please visit this link: \n' + lib.config.BASE_URL + '/verifyEmail/' + encodeURIComponent(data[0].user_id) +
         '/' + encodeURIComponent(data[0].recovery_key) + '/' + encodeURIComponent(data[0].email) + '\n \n Thank you for using RememberMe!'
       };
       nm.sendMail(mailOptions, function(error, info) {
@@ -142,7 +142,8 @@ users.newEmail = function (auth, query) {
     .where('email_attempts', '<=', 6)
     .returning([
       'user_id',
-      'recovery_key'
+      'recovery_key',
+      'email'
     ]).then(function (user) {
       joi.assert(user, joi.array().min(1).required());
       // Send email to user
@@ -152,7 +153,7 @@ users.newEmail = function (auth, query) {
           from: 'RememberMe <noreply@remembermeapp.io>',
           subject: 'Verify Email - RememberMe',
           text: 'An email verification has been requested for your RememberMe account. \n \n To verify your email for ' +
-          'RememberMe, please visit this link: \n http://localhost:3000/verifyEmail/' + encodeURIComponent(data[0].user_id) +
+          'RememberMe, please visit this link: \n' + lib.config.BASE_URL + '/verifyEmail/' + encodeURIComponent(data[0].user_id) +
           '/' + encodeURIComponent(data[0].recovery_key) + '/' + encodeURIComponent(data[0].email) + '\n \n Thank you for using RememberMe!'
         };
         nm.sendMail(mailOptions, function(error, info) {
@@ -271,7 +272,7 @@ users.getUserInfo = function (query) {
   });
 };
 
-//CHECK: sendRecoveryEmail <email>
+//DONE: sendRecoveryEmail <email>
 users.sendRecoveryEmail = function (query) {
   return q.fcall(function () {
     joi.assert(query, {
@@ -289,7 +290,6 @@ users.sendRecoveryEmail = function (query) {
     .where('email_attempts', '<=', 6)
     .returning([
       'user_id',
-      'username',
       'email',
       'recovery_key'
     ]);
@@ -299,10 +299,13 @@ users.sendRecoveryEmail = function (query) {
       var mailOptions = {
         to: data[0].email,
         from: 'RememberMe <noreply@remembermeapp.io>',
-        subject: 'Verify Email - RememberMe',
-        text: 'An email verification has been requested for your RememberMe account. \n \n To verify your email for ' +
-        'RememberMe, please visit this link: \n http://localhost:3000/verifyEmail/' + encodeURIComponent(data[0].user_id) +
-        '/' + encodeURIComponent(data[0].recovery_key) + '/' + encodeURIComponent(data[0].email) + '\n \n Thank you for using RememberMe!'
+        subject: 'Account Recovery - RememberMe',
+        text: 'A password reset has been requested for your RememberMe account. \n \n If you did not make this ' +
+        'request, you can safely ignore this email. A password reset request can be made by anyone, and it does not ' +
+        'indicate that your account is in any danger of being accessed by someone else. \n \n If you do actually want ' +
+        'to reset your password, visit this link: \n' + lib.config.BASE_URL + '/newPassword/' +
+        encodeURIComponent(data[0].user_id) + '/' + encodeURIComponent(data[0].recovery_key) + '\n \n Thank you ' +
+        'for using RememberMe!'
       };
       nm.sendMail(mailOptions, function(error, info) {
         if(error){
@@ -314,6 +317,55 @@ users.sendRecoveryEmail = function (query) {
     });
   }).then(function (data) {
     return 'Email sent';
+  });
+};
+
+//DONE: verifyRecoveryEmail (session_id) <user_id> <new_password> <recovery_key>
+users.verifyRecoveryEmail = function (session_id, query) {
+  return q.fcall(function () {
+    joi.assert(query, {
+      user_id: joi.string().max(20).required(),
+      new_password: joi.string().min(6).max(100).required(),
+      recovery_key: joi.string().required()
+    });
+    return {
+      session_id: session_id,
+      user_id: query.user_id,
+      new_password: query.new_password,
+      recovery_key: query.recovery_key
+    };
+  }).then(function (data) {
+    //create new salt
+    var new_salt = crypto.randomBytes(64).toString('base64');
+    //create new password hash
+    var new_passwordHash = crypto.pbkdf2Sync(data.new_password, new_salt, 50000, 256, 'sha256').toString('base64');
+    //create new recovery key
+    var new_recovery_key = crypto.randomBytes(64).toString('base64');
+    console.log(data);
+    return knex('users')
+    .update({
+      verified: true,
+      salt: new_salt,
+      password: new_passwordHash,
+      recovery_key: new_recovery_key,
+      updated_at: knex.raw('now()')
+    })
+    .where('recovery_key', '=', data.recovery_key)
+    .where('user_id', '=', data.user_id)
+    .returning([
+      'user_id'
+    ]);
+  }).then(function (data) {
+    joi.assert(data, joi.array().min(1).required());
+    //delete old session tokens
+    return lib.util.removeSessions({user_id: data[0].user_id}).then(function () {
+      //create new refresh token
+      return lib.util.newRefreshToken({
+        user_id: data[0].user_id,
+        session: session_id,
+        scope: lib.config.TOKENS.scope
+      });
+    });
   });
 };
 
