@@ -1,5 +1,5 @@
 module.exports = {
   devServer: {
-    proxy: (process.env.PROXY ? process.env.PROXY : 'http://localhost:3000')
+    proxy: (process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : '')
   }
 };

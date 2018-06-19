@@ -7,7 +7,7 @@ var mid = lib.middleware;
 // * = Authentication required
 
 /*===== Users =====*/
-//DONE: POST newUser <username> <email> <password>
+//DONE: POST newUser <email> <password>
 router.post('/newUser', function (req, res, next) {
   lib.users.newUser(req.body).then(function (data) {
     res.json({
@@ -48,21 +48,6 @@ router.post('/newEmail', mid.auth, function (req, res, next) {
     });
   }).catch(function (error) {
     console.log(error);
-    res.json({
-      success: false,
-      response: 'request failed'
-    });
-  });
-});
-
-//DONE: POST *newUsername (user_id) <new_username>
-router.post('/newUsername', mid.auth, function (req, res, next) {
-  lib.users.newUsername(req.auth, req.body).then(function (data) {
-    res.json({
-      success: true,
-      response: data
-    });
-  }).catch(function (error) {
     res.json({
       success: false,
       response: 'request failed'

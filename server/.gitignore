@@ -1,5 +1,6 @@
 .idea/
 node_modules/
+public/
 npm-debug.log
 package-lock.json
 config.js

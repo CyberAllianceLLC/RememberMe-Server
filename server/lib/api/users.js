@@ -19,16 +19,14 @@ nm.verify(function (error) {
 
 var users = {};
 
-//DONE: newUser <username> <email> <password>
+//DONE: newUser <email> <password>
 users.newUser = function (query) {
   return q.fcall(function () {
     joi.assert(query, {
-      username: joi.string().min(3).max(20).required(),
       email: joi.string().email().required(),
       password: joi.string().min(6).max(400).required()
     });
     return {
-      username: query.username,
       email: query.email,
       password: query.password
     }
@@ -39,7 +37,6 @@ users.newUser = function (query) {
     return knex('users')
     .insert({
       user_id: shortid.generate(),
-      username: data.username,
       email: data.email,
       salt: salt,
       password: passwordHash,
@@ -170,32 +167,6 @@ users.newEmail = function (auth, query) {
   });
 };
 
-//DONE: *newUsername (user_id) <new_username>
-users.newUsername = function (auth, query) {
-  return q.fcall(function () {
-    joi.assert(query, {
-      new_username: query.new_username
-    });
-    return {
-      user_id: auth.user_id,
-      new_username: query.new_username
-    };
-  }).then(function (data) {
-    return knex('users')
-    .update({
-      username: data.new_username,
-      updated_at: knex.raw('now()')
-    })
-    .returning([
-      'username'
-    ])
-    .where('user_id', '=', data.user_id);
-  }).then(function (data) {
-    joi.assert(data, joi.array().min(1).required());
-    return 'Username updated';
-  });
-};
-
 //DONE: loginUser (session_id) <email> <password>
 users.loginUser = function (session_id, query) {
   return q.fcall(function () {
@@ -260,7 +231,6 @@ users.getUserInfo = function (query) {
     return knex('users')
     .select([
       'user_id',
-      'username',
       'email',
       'created_at',
       'updated_at'

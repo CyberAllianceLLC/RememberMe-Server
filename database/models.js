@@ -14,7 +14,6 @@ q.fcall(function () {
 }).then(function () {
   return knex.schema.createTable('users', function (table) {
     table.string('user_id', 20).notNullable().primary().unique();
-    table.string('username', 20).notNullable().unique().index();
     table.string('email', 50).notNullable().unique().index();
     table.boolean('verified').notNullable().defaultTo(false);
     table.string('salt', 100).notNullable();

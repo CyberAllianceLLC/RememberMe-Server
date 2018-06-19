@@ -1,6 +1,7 @@
-.idea
-node_modules
-/dist
+.idea/
+.cache/
+node_modules/
+dist/
 test.js
 package-lock.json
 npm-debug.log*
