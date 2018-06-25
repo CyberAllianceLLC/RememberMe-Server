@@ -8,7 +8,13 @@ var bodyParser = require('body-parser');
 var api = require('./routes/api');
 
 var app = express();
-
+//remove X-Powered-By headers
+app.disable('x-powered-by');
+//prevent iFrame click jacking
+app.use(function (req, res, next) {
+  res.setHeader('X-Frame-Options', 'DENY');
+  next();
+});
 //uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
