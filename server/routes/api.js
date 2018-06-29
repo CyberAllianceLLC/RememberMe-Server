@@ -15,7 +15,6 @@ router.post('/newUser', function (req, res, next) {
       response: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       response: 'request failed'
@@ -94,7 +93,6 @@ router.post('/sendRecoveryEmail', function (req, res, next) {
       response: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       response: 'request failed'
@@ -111,7 +109,6 @@ router.post('/verifyRecoveryEmail', function (req, res, next) {
       response: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       response: 'request failed'
@@ -143,7 +140,6 @@ router.post('/verifyNewEmail', function (req, res, next) {
       response: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       response: 'request failed'
@@ -167,7 +163,7 @@ router.post('/removeUser', mid.auth, function (req, res, next) {
 });
 
 /*===== Content =====*/
-//DONE: POST *newContent (user_id) <content_type> <picture> <title> <description>
+//DONE: POST *newContent (user_id) [<content_type> <picture> <title> <description>]
 router.post('/newContent', mid.auth, function (req, res, next) {
   lib.content.newContent(req.auth, req.body).then(function (data) {
     res.json({
@@ -175,6 +171,7 @@ router.post('/newContent', mid.auth, function (req, res, next) {
       result: data
     });
   }).catch(function (error) {
+    console.log(error);
     res.json({
       success: false,
       result: 'request failed'
