@@ -26,6 +26,7 @@ services:
     environment:
       DATABASE_URL: 'postgres://postgres:@db:5432/postgres'
       NODE_ENV: 'development'
+      PORT: '3000'
       DYNO: 'web.1'
     volumes:
       - ./server:/app

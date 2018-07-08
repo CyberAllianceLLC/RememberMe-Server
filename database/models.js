@@ -3,15 +3,13 @@ var q = require('q');
 var knex = require('knex')({
   client: 'pg',
   connection: ((process.env['DSN']) ? process.env['DSN'] : 'postgres://postgres:@db:5432/postgres'),
-  debug: (process.env['NODE_ENV'] === 'development')
+  debug: (process.env['NODE_ENV'] !== 'production')
 });
 
 /*Models*/
 
 q.fcall(function () {
-  // Initialize database
-  return knex.raw('CREATE EXTENSION pg_trgm');
-}).then(function () {
+  // create users table
   return knex.schema.createTable('users', function (table) {
     table.string('user_id', 20).notNullable().primary().unique();
     table.string('email', 50).notNullable().unique().index();
@@ -25,6 +23,7 @@ q.fcall(function () {
     table.timestamp('created_at').notNullable().defaultTo(knex.raw('now()')).index();
   })
 }).then(function () {
+  // create tokens table
   return knex.schema.createTable('tokens', function (table) {
     table.string('token_id', 20).notNullable().primary().unique();
     table.string('user_id', 20).notNullable().references('users.user_id').onDelete('CASCADE').index();
@@ -35,6 +34,7 @@ q.fcall(function () {
     table.timestamp('created_at').notNullable().defaultTo(knex.raw('now()')).index();
   });
 }).then(function () {
+  // create contents table
   return knex.schema.createTable('contents', function (table) {
     table.string('content_id', 20).notNullable().primary().unique();
     table.string('user_id', 20).notNullable().references('users.user_id').onDelete('CASCADE').index();

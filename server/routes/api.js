@@ -46,7 +46,6 @@ router.post('/newEmail', mid.auth, function (req, res, next) {
       response: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       response: 'request failed'
@@ -152,12 +151,12 @@ router.post('/removeUser', mid.auth, function (req, res, next) {
   lib.users.removeUser(req.auth, req.body).then(function (data) {
     res.json({
       success: true,
-      result: data
+      response: data
     });
   }).catch(function (error) {
     res.json({
       success: false,
-      result: 'request failed'
+      response: 'request failed'
     });
   });
 });
@@ -168,13 +167,12 @@ router.post('/newContent', mid.auth, function (req, res, next) {
   lib.content.newContent(req.auth, req.body).then(function (data) {
     res.json({
       success: true,
-      result: data
+      response: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
-      result: 'request failed'
+      response: 'request failed'
     });
   });
 });
@@ -184,12 +182,12 @@ router.post('/getContent', mid.auth, function (req, res, next) {
   lib.content.getContent(req.auth, req.body).then(function (data) {
     res.json({
       success: true,
-      result: data
+      response: data
     });
   }).catch(function (error) {
     res.json({
       success: false,
-      result: 'request failed'
+      response: 'request failed'
     });
   });
 });
@@ -199,12 +197,12 @@ router.post('/getContentByType', mid.auth, function (req, res, next) {
   lib.content.getContentByType(req.auth, req.body).then(function (data) {
     res.json({
       success: true,
-      result: data
+      response: data
     });
   }).catch(function (error) {
     res.json({
       success: false,
-      result: 'request failed'
+      response: 'request failed'
     });
   });
 });
@@ -214,12 +212,12 @@ router.post('/updateContent', mid.auth, function (req, res, next) {
   lib.content.updateContent(req.auth, req.body).then(function (data) {
     res.json({
       success: true,
-      result: data
+      response: data
     });
   }).catch(function (error) {
     res.json({
       success: false,
-      result: 'request failed'
+      response: 'request failed'
     });
   });
 });
@@ -229,12 +227,12 @@ router.post('/removeContent', mid.auth, function (req, res, next) {
   lib.content.removeContent(req.auth, req.body).then(function (data) {
     res.json({
       success: true,
-      result: data
+      response: data
     });
   }).catch(function (error) {
     res.json({
       success: false,
-      result: 'request failed'
+      response: 'request failed'
     });
   });
 });
