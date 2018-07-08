@@ -3,7 +3,7 @@ var q = require('q');
 var knex = require('knex')({
   client: 'pg',
   connection: ((process.env['DSN']) ? process.env['DSN'] : 'postgres://postgres:@db:5432/postgres'),
-  debug: (process.env['NODE_ENV'] !== 'production')
+  debug: (process.env['NODE_ENV'] === 'development')
 });
 
 /*Models*/
