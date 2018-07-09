@@ -120,7 +120,7 @@ users.newPassword = function (session_id, auth, query) {
   });
 };
 
-//CHECK: *newEmail (user_id) <email>
+//DONE: *newEmail (user_id) <new_email>
 users.newEmail = function (auth, query) {
   return q.fcall(function () {
     joi.assert(query, {
@@ -139,19 +139,18 @@ users.newEmail = function (auth, query) {
     .where('email_attempts', '<=', 6)
     .returning([
       'user_id',
-      'recovery_key',
-      'email'
+      'recovery_key'
     ]).then(function (user) {
       joi.assert(user, joi.array().min(1).required());
       // Send email to user
       return q.Promise(function (resolve, reject) {
         var mailOptions = {
-          to: data[0].email,
+          to: data.new_email,
           from: 'RememberMe <noreply@remembermeapp.io>',
           subject: 'Verify Email - RememberMe',
           text: 'An email verification has been requested for your RememberMe account. \n \n To verify your email for ' +
-          'RememberMe, please visit this link: \n' + lib.config.BASE_URL + '/verifyEmail/' + encodeURIComponent(data[0].user_id) +
-          '/' + encodeURIComponent(data[0].recovery_key) + '/' + encodeURIComponent(data[0].email) + '\n \n Thank you for using RememberMe!'
+          'RememberMe, please visit this link: \n' + lib.config.BASE_URL + '/verifyEmail/' + encodeURIComponent(user[0].user_id) +
+          '/' + encodeURIComponent(user[0].recovery_key) + '/' + encodeURIComponent(data.new_email) + '\n \n Thank you for using RememberMe!'
         };
         nm.sendMail(mailOptions, function(error, info) {
           if(error){
