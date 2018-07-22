@@ -135,7 +135,7 @@ content.updateContent = function (auth, query) {
     .update({
       type: data.content_type,
       picture: data.picture,
-      title: data.picture,
+      title: data.title,
       description: data.description
     })
     .where('user_id', '=', data.user_id)

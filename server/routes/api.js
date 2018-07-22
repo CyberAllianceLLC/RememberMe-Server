@@ -46,7 +46,6 @@ router.post('/newEmail', mid.auth, function (req, res, next) {
       response: data
     });
   }).catch(function (error) {
-    console.log(error);
     res.json({
       success: false,
       response: 'request failed'

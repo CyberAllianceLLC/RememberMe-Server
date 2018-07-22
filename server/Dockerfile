@@ -2,7 +2,6 @@ FROM node:latest
 
 # Start
 ENV NODE_ENV="production"
-ENV PORT="3000"
 
 WORKDIR ./app
 COPY ./ ./
